@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+require "optparse"
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Uso: gem_exec -r FILE -c FILE"
+
+  opts.on( '-r', '--recipe FILE', 'blablabla' ) do |recipe|
+    options[:recipe] = recipe
+  end
+
+  opts.on( '-c', '--config FILE', 'blablabla' ) do |config|
+    options[:config] = config
+  end
+
+  opts.on( '-d', '--debug', 'Inicializar com ruby-debug' ) do
+    require "rubygems"
+    require "ruby-debug"
+  end
+
+  opts.on( '-h', '--help', 'Mostra essa ajuda' ) do
+    puts opts
+    exit
+  end
+end
+
+optparse.parse!
+
+# do something with options var
+
