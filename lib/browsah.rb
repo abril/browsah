@@ -14,6 +14,6 @@ require "bundler/setup"
 # end
 
 module Browsah
-
+  autoload :VERSION, 'browsah/version'
 end
 

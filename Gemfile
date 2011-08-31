@@ -10,3 +10,5 @@ gem "ruby-debug", :group => [:development, :test]
 group :test do
 # put test dependencies here
 end
+
+gem "step-up", "~> 0.6.0", :group => [:source]
