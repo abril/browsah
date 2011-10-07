@@ -1,4 +1,4 @@
-module Browsah
+class Browsah
   module VERSION #:nodoc:
     version = nil
     version = $1 if ::File.expand_path('../..', __FILE__) =~ /\/browsah-(\d[\w\.]+)/

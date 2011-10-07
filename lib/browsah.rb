@@ -5,15 +5,11 @@ require "rubygems"
 require "bundler/setup"
 # require other dependencies here...
 
-# Gem requirements
-# Your can require or autoload gem files here, see examples below
-# require "gem_name/file"
-# module GemName
-  # autoload :AClass      , "migrator/a_class"
-  # autoload :AnotherClass, "migrator/another_class"
-# end
+require 'browsah/version'
+require 'browsah/dsl'
+require 'browsah/response'
 
-module Browsah
-  autoload :VERSION, 'browsah/version'
+class Browsah
+  include Dsl
+  # autoload :AClass , "migrator/a_class"
 end
-

@@ -1,14 +1,15 @@
 source :rubygems
 
 # Main dependencies
-# gem "activesupport", "2.3.8", :require => "active_support"
-# gem "methodize"
+gem 'em-http-request'
+gem 'em-synchrony'
 
 # Other dependencies
-gem "ruby-debug", :group => [:development, :test]
+gem "ruby-debug19", :group => [:development, :test]
 
 group :test do
-# put test dependencies here
+  gem 'minitest', :require => 'minitest/autorun'
+  gem 'webmock' , :require => 'webmock/test_unit'
 end
 
 gem "step-up", "~> 0.6.0", :group => [:source]
