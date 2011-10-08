@@ -3,6 +3,7 @@ source :rubygems
 # Main dependencies
 gem 'em-http-request'
 gem 'em-synchrony'
+gem 'addressable'
 
 # Other dependencies
 gem "ruby-debug19", :group => [:development, :test]

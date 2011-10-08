@@ -2,12 +2,16 @@ require 'em-synchrony/em-http'
 
 class Browsah
   module Dsl
-    def initialize
+    def initialize(uri = '')
+      @base_uri  = uri.kind_of?(String) ? Addressable::URI.parse(uri) : uri
       @pull = []
     end
     
     def get(urls, &block)
-      @pull << urls
+      urls = urls.kind_of?(Array) ? urls : [urls]
+      @pull << urls.map { |url|
+        request = Request.new(@base_uri, url)
+      }
       done(&block) if block_given?
     end
     
@@ -22,16 +26,21 @@ class Browsah
         multi     = EM::Synchrony::Multi.new
         responses = []
         
-        @pull.each do |request|
-          http = EM::HttpRequest.new(request).aget
-          http.callback {
-            response = Response.new
-            response.status_code = http.response_header.status
-            response.body        = http.response
-            responses << response
-          }
-          multi.add request.to_sym, http
+        @pull.each do |requests|
+          requests.each do |request|
+            http = EM::HttpRequest.new(request.uri.to_s).aget
+            http.callback {
+              response = Response.new
+              response.status_code = http.response_header.status
+              response.body        = http.response
+              responses << response
+            }
+            multi.add request.uri.to_s.to_sym, http
+          end
         end
+        
+        # Clean pull of request
+        @pull = []
         
         multi.perform
         block.call(*responses) if block_given?

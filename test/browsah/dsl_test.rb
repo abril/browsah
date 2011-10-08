@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 describe Browsah do
   before do
-    @bw  = Browsah.new
     @url = 'http://example.com'
     stub_request(:get, /example.com.*/).
     to_return(lambda { |request|
@@ -14,10 +13,14 @@ describe Browsah do
   end
   
   describe "get" do
+    before do
+      @bw  = Browsah.new
+    end
+    
     it "simple" do
       @bw.get @url + '/200/Ok' do |response|
-        assert_equal response.status_code, 200
-        assert_equal response.body, 'Ok'
+        assert_equal 200,  response.status_code
+        assert_equal 'Ok', response.body
       end
     end
 
@@ -31,13 +34,13 @@ describe Browsah do
         body = response.body
       end
       
-      assert_equal status_code, 200
-      assert_equal body, 'Ok'
+      assert_equal 200, status_code
+      assert_equal 'Ok', body
     end
     
     it "multi request" do
-      @bw.get 'http://example.com/200/Ok'
-      @bw.get 'http://example.com/404/Not found'
+      @bw.get "#{@url}/200/Ok"
+      @bw.get "#{@url}/404/Not found"
       
       result = []
       @bw.done do |r1, r2|
@@ -45,11 +48,23 @@ describe Browsah do
         result << r2.status_code
       end
       
-      assert_equal result, [200, 404]
+      assert_equal [200, 404], result
     end
   end
   
-  describe "rules" do
-    it "simple rules"
+  it "support host or short path in request" do
+    bw = Browsah.new(@url)
+    bw.get "/200/Oks" do |r|
+      assert_equal 200, r.status_code
+    end
+    bw.get "#{@url}/301/Redirect" do |r|
+      assert_equal 301, r.status_code
+    end
   end
+  
+  # describe "rules" do
+  #   it "simple rules" do
+  #     @bw.rule 'http://'
+  #   end
+  # end
 end

@@ -8,6 +8,7 @@ require "bundler/setup"
 require 'browsah/version'
 require 'browsah/dsl'
 require 'browsah/response'
+require 'browsah/request'
 
 class Browsah
   include Dsl

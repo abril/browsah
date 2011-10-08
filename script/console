@@ -2,6 +2,6 @@
 # File: script/console
 irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
 ENV["MIGRATOR_CALLER"] = "console"
-libs = " -r #{File.dirname(__FILE__) + '/../lib/browsah.rb'} -r ruby-debug"
+libs = " -r #{File.expand_path(File.dirname(__FILE__)) + '/../lib/browsah.rb'} -r ruby-debug"
 puts "Loading gem development environment..."
 exec "#{irb} #{libs} --simple-prompt #{ARGV.join("")}"
