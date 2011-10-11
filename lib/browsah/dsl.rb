@@ -3,7 +3,7 @@ require 'em-synchrony/em-http'
 class Browsah
   module Dsl
     def initialize(uri = '')
-      @base_uri  = uri.kind_of?(String) ? Addressable::URI.parse(uri) : uri
+      @base_uri = uri.kind_of?(String) ? Addressable::URI.parse(uri) : uri
       @pull = []
     end
     
@@ -27,16 +27,22 @@ class Browsah
         responses = []
         
         @pull.each do |requests|
+          if (is_multi = requests.size > 1)
+            responses << []
+            index = responses.size - 1
+          end
+          
           requests.each do |request|
             http = EM::HttpRequest.new(request.uri.to_s).aget
             http.callback {
               response = Response.new
               response.status_code = http.response_header.status
               response.body        = http.response
-              responses << response
+              (is_multi ? responses[index] : responses) << response
             }
             multi.add request.uri.to_s.to_sym, http
           end
+          
         end
         
         # Clean pull of request

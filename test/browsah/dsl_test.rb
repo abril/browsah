@@ -3,6 +3,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 describe Browsah do
   before do
     @url = 'http://example.com'
+    @url_200 = "#{@url}/200/Ok"
+    @url_301 = "#{@url}/301/Redirect"
+    @url_404 = "#{@url}/404/Not fould"
+    
     stub_request(:get, /example.com.*/).
     to_return(lambda { |request|
       {
@@ -18,14 +22,14 @@ describe Browsah do
     end
     
     it "simple" do
-      @bw.get @url + '/200/Ok' do |response|
+      @bw.get @url_200 do |response|
         assert_equal 200,  response.status_code
         assert_equal 'Ok', response.body
       end
     end
 
     it "simple using done to wait response" do
-      @bw.get @url + '/200/Ok'
+      @bw.get @url_200
       
       status_code = nil
       body = nil
@@ -38,17 +42,26 @@ describe Browsah do
       assert_equal 'Ok', body
     end
     
+    it "support multi urls in one request" do
+      results = []
+      @bw.get [@url_200, @url_404] do |response|
+        results << response.first.status_code
+        results << response.last.status_code
+      end
+      assert_equal [200, 404], results
+    end
+    
     it "multi request" do
-      @bw.get "#{@url}/200/Ok"
-      @bw.get "#{@url}/404/Not found"
+      @bw.get @url_200
+      @bw.get @url_404
       
-      result = []
+      results = []
       @bw.done do |r1, r2|
-        result << r1.status_code
-        result << r2.status_code
+        results << r1.status_code
+        results << r2.status_code
       end
       
-      assert_equal [200, 404], result
+      assert_equal [200, 404], results
     end
   end
   
