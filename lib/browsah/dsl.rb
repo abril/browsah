@@ -12,16 +12,13 @@ class Browsah
       @pull << urls.map { |url|
         request = Request.new(@base_uri, url)
       }
-      done(&block) if block_given?
+      on_done(&block) if block_given?
     end
     
     def rule
     end
     
-    def on
-    end
-    
-    def done(&block)
+    def on_done(&block)
       EM.synchrony do
         multi     = EM::Synchrony::Multi.new
         responses = []
@@ -35,9 +32,7 @@ class Browsah
           requests.each do |request|
             http = EM::HttpRequest.new(request.uri.to_s).aget
             http.callback {
-              response = Response.new
-              response.status_code = http.response_header.status
-              response.body        = http.response
+              response = Response.new(self, http.response_header.status, {}, http.response)
               (is_multi ? responses[index] : responses) << response
             }
             multi.add request.uri.to_s.to_sym, http

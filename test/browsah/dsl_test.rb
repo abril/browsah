@@ -33,7 +33,7 @@ describe Browsah do
       
       status_code = nil
       body = nil
-      @bw.done do |response|
+      @bw.on_done do |response|
         status_code = response.status_code
         body = response.body
       end
@@ -44,9 +44,9 @@ describe Browsah do
     
     it "support multi urls in one request" do
       results = []
-      @bw.get [@url_200, @url_404] do |response|
-        results << response.first.status_code
-        results << response.last.status_code
+      @bw.get [@url_200, @url_404] do |responses|
+        results << responses.first.status_code
+        results << responses.last.status_code
       end
       assert_equal [200, 404], results
     end
@@ -56,7 +56,7 @@ describe Browsah do
       @bw.get @url_404
       
       results = []
-      @bw.done do |r1, r2|
+      @bw.on_done do |r1, r2|
         results << r1.status_code
         results << r2.status_code
       end
