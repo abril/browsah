@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'em-synchrony/em-http'
 
 class Browsah
@@ -7,8 +9,10 @@ class Browsah
       @pull = []
     end
     
-    def get(urls, &block)
-      urls = urls.kind_of?(Array) ? urls : [urls]
+    def get(urls, *args, &block)
+      urls  = urls.kind_of?(Array) ? urls : [urls]
+      urls += args
+      
       @pull << urls.map { |url|
         request = Request.new(@base_uri, url)
       }
@@ -19,6 +23,7 @@ class Browsah
     end
     
     def on_done(&block)
+      result = nil
       EM.synchrony do
         multi     = EM::Synchrony::Multi.new
         responses = []
@@ -44,9 +49,10 @@ class Browsah
         @pull = []
         
         multi.perform
-        block.call(*responses) if block_given?
+        result = (block.call(*responses)) if block_given?
         EM.stop
       end
+      result
     end
   end
 end
