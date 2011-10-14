@@ -2,23 +2,17 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 describe Browsah do
   before do
+    # @url = 'http://localhost:4567'
     @url = 'http://example.com'
     @url_200 = "#{@url}/200/Ok"
     @url_301 = "#{@url}/301/Redirect"
-    @url_404 = "#{@url}/404/Not fould"
-    
-    stub_request(:get, /example.com.*/).
-    to_return(lambda { |request|
-      {
-        :status => request.uri.path[1..3].to_i,
-        :body => request.uri.path[5..-1]
-      }
-    })
+    @url_404 = "#{@url}/404/Notfould"
   end
   
   describe "get" do
     before do
       @bw  = Browsah.new
+      browsah_stub_request
     end
     
     it "simple" do
@@ -57,14 +51,21 @@ describe Browsah do
   end
   
   it "support host or short path in request" do
+    browsah_stub_request
     bw = Browsah.new(@url)
     assert_equal 200, (bw.get "/200/Oks" do |r| r.status_code end)
     assert_equal 301, (bw.get "#{@url}/301/Redirect" do |r| r.status_code end)
   end
   
-  # describe "rules" do
-  #   it "simple rules" do
-  #     @bw.rule 'http://'
-  #   end
-  # end
+  def browsah_stub_request(method = :get, pattern = /example.com.*/, &block)
+    proc = block_given? ? lambda(&block) : lambda do |request|
+      path = path_extract(request.uri)
+      { :status => path[1].to_i, :body => path[2] }
+    end
+    stub_request(method, pattern).to_return(proc)
+  end
+  
+  def path_extract(uri)
+    Addressable::URI.parse(uri).path.split("/")
+  end
 end
