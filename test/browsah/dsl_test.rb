@@ -25,7 +25,7 @@ describe Browsah do
       assert_equal 301, (bw.get "#{@url}/301/Redirect" do |r| r.status_code end)
     end
     
-    describe "support verb get" do
+    describe "support get" do
       before do
         @bw  = Browsah.new
         browsah_stub_request
@@ -71,7 +71,31 @@ describe Browsah do
           [r1.status_code, r2.status_code]
         end)
       end
-    end  
+    end
+    
+    describe "support post" do
+      before do
+        @bw = Browsah.new(@url)
+      end
+      
+      it "simple call" do
+        browsah_stub_request(:post).with(
+          :body => 'foo bar'
+        )
+        assert_equal 200, (@bw.post @url_200, :body => 'foo bar' do |response|
+          response.status_code
+        end)
+      end
+      
+      it "form call" do
+        browsah_stub_request(:post).with(
+          :body => "text=foo%20bar"
+        )
+        assert_equal 200, (@bw.post @url_200, :body => { :text => "foo bar"} do |response|
+          response.status_code
+        end)
+      end
+    end
   end
   
   # Helpers
