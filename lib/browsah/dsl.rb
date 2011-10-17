@@ -10,11 +10,17 @@ class Browsah
     end
     
     def get(urls, *args, &block)
+      options = {
+        :body => nil,
+        :headers => {}
+      }
+      options.merge!(args.pop) if args.last.kind_of?(Hash)
+      
       urls  = urls.kind_of?(Array) ? urls : [urls]
       urls += args
       
       @pull << urls.map { |url|
-        request = Request.new(@base_uri, url)
+        request = Request.new(@base_uri, url, options)
       }
       on_done(&block) if block_given?
     end
@@ -35,7 +41,7 @@ class Browsah
           end
           
           requests.each do |request|
-            http = EM::HttpRequest.new(request.uri.to_s).aget
+            http = EM::HttpRequest.new(request.uri.to_s).get(:head => request.headers)
             http.callback {
               response = Response.new(self, http.response_header.status, {}, http.response)
               (is_multi ? responses[index] : responses) << response
@@ -49,7 +55,10 @@ class Browsah
         @pull = []
         
         multi.perform
-        result = (block.call(*responses)) if block_given?
+        if block_given?
+          responses << self if block.arity > responses.count
+          result = (block.call(*responses))
+        end
         EM.stop
       end
       result

@@ -9,54 +9,72 @@ describe Browsah do
     @url_404 = "#{@url}/404/Notfould"
   end
   
-  describe "get" do
-    before do
-      @bw  = Browsah.new
-      browsah_stub_request
-    end
-    
-    it "simple" do
-      response = @bw.get @url_200 do |response|
-        response
-      end
-      assert_equal 200,  response.status_code
-      assert_equal 'Ok', response.body
+  describe "requests" do
+    it "should support a headers" do
+      browsah_stub_request.with(
+        :headers => { "Content-Type" => "application/json" }
+      )
+      bw = Browsah.new(@url)
+      assert_equal 200, (bw.get "/200/Oks", :headers => { "Content-Type" => "application/json" }  { |r| r.status_code } )
     end
 
-    it "simple using done to wait response" do
-      @bw.get @url_200
-      result = @bw.on_done do |response|
-        [response.status_code, response.body]
+    it "support host or short path" do
+      browsah_stub_request
+      bw = Browsah.new(@url)
+      assert_equal 200, (bw.get "/200/Oks" do |r| r.status_code end)
+      assert_equal 301, (bw.get "#{@url}/301/Redirect" do |r| r.status_code end)
+    end
+    
+    describe "support verb get" do
+      before do
+        @bw  = Browsah.new
+        browsah_stub_request
       end
-      assert_equal [200, 'Ok'], result
-    end
-    
-    it "support multi urls in one request" do
-      assert_equal [200, 404], (@bw.get [@url_200, @url_404] do |responses|
-        [responses.first.status_code, responses.last.status_code]
-      end)
-      assert_equal [200, 404], (@bw.get @url_200, @url_404 do |responses|
-        [responses.first.status_code, responses.last.status_code]
-      end)
-    end
-    
-    it "multi request" do
-      @bw.get @url_200
-      @bw.get @url_404
-      
-      assert_equal [200, 404], (@bw.on_done do |r1, r2|
-        [r1.status_code, r2.status_code]
-      end)
-    end
+
+      it "simple" do
+        response = @bw.get @url_200 do |response|
+          response
+        end
+        assert_equal 200,  response.status_code
+        assert_equal 'Ok', response.body
+      end
+
+      it "simple using done to wait response" do
+        @bw.get @url_200
+        result = @bw.on_done do |response|
+          [response.status_code, response.body]
+        end
+        assert_equal [200, 'Ok'], result
+      end
+
+      it "should pass browsah to block" do
+        result = @bw.get @url_200 do |response, browsah|
+          browsah
+        end
+        assert_kind_of Browsah, result
+      end
+
+      it "support multi urls in one request" do
+        assert_equal [200, 404], (@bw.get [@url_200, @url_404] do |responses|
+          [responses.first.status_code, responses.last.status_code]
+        end)
+        assert_equal [200, 404], (@bw.get @url_200, @url_404 do |responses|
+          [responses.first.status_code, responses.last.status_code]
+        end)
+      end
+
+      it "multi request" do
+        @bw.get @url_200
+        @bw.get @url_404
+
+        assert_equal [200, 404], (@bw.on_done do |r1, r2|
+          [r1.status_code, r2.status_code]
+        end)
+      end
+    end  
   end
   
-  it "support host or short path in request" do
-    browsah_stub_request
-    bw = Browsah.new(@url)
-    assert_equal 200, (bw.get "/200/Oks" do |r| r.status_code end)
-    assert_equal 301, (bw.get "#{@url}/301/Redirect" do |r| r.status_code end)
-  end
-  
+  # Helpers
   def browsah_stub_request(method = :get, pattern = /example.com.*/, &block)
     proc = block_given? ? lambda(&block) : lambda do |request|
       path = path_extract(request.uri)

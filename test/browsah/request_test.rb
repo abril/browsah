@@ -11,4 +11,26 @@ describe Browsah::Request do
     request = Browsah::Request.new('http://example.com', '/path')
     assert_equal "http://example.com/path", request.uri.to_s
   end
+  
+  describe "headers" do
+    before do
+      @headers = { "content-type" => "text/html" }
+    end
+    
+    it "should return blank headers for default" do
+      request = Browsah::Request.new('http://example.com', '/path')
+      assert_equal({}, request.headers)
+    end
+    
+    it "should support the passage of headers in the initialize" do
+      request = Browsah::Request.new('http://example.com', '/path', { :headers => @headers })
+      assert_equal(@headers, request.headers)
+    end
+    
+    it "should normalize headers" do
+      headers = { "Content-Type" => "text/html" }
+      request = Browsah::Request.new('http://example.com', '/path', { :headers => headers })
+      assert_equal(@headers, request.headers)
+    end
+  end
 end
