@@ -3,14 +3,14 @@ class Browsah
     attr_accessor :uri
     attr_reader :headers
     attr_reader :body
-    attr_reader :verb
+    attr_reader :method
     
-    alias_method :type, :verb
+    alias_method :type, :method
     
-    def initialize(verb, base_uri, path = '', options = {})      
+    def initialize(method, base_uri, path = '', options = {})      
       (options, path) = [path, ''] if path.kind_of?(Hash)
 
-      @verb    = verb
+      @method    = method
       @headers = normalize_headers(options[:headers] || options['headers'] || {})
       @body    = (options[:body] || options['body'] || nil)
       

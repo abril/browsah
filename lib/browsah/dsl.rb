@@ -17,7 +17,7 @@ class Browsah
       request(:post, urls, *args, &block)
     end
     
-    def request(verb, urls, *args, &block)
+    def request(method, urls, *args, &block)
       # Default options
       options = { :body => nil, :headers => {} }
       options.merge!(args.pop) if args.last.kind_of?(Hash)
@@ -26,7 +26,7 @@ class Browsah
       urls += args
       
       @pull << urls.map { |url|
-        request = Request.new(verb.to_sym, @base_uri, url, options)
+        request = Request.new(method.to_sym, @base_uri, url, options)
       }
       on_done(&block) if block_given?
     end
@@ -44,7 +44,7 @@ class Browsah
           end
           
           requests.each do |request|
-            http = EM::HttpRequest.new(request.uri.to_s).send(request.verb, {
+            http = EM::HttpRequest.new(request.uri.to_s).send(request.method, {
               :body => request.body,
               :head => request.headers
             })

@@ -15,13 +15,13 @@ describe Browsah::Request do
       end
     end
     
-    describe "verb" do
-      it "should support verb in initializer" do
+    describe "method" do
+      it "should support method in initializer" do
         request = Browsah::Request.new(:get, 'http://example.com')
-        assert_equal :get, request.verb
+        assert_equal :get, request.method
       end
       
-      it "should provide alias 'type' to verb" do
+      it "should provide alias 'type' to method" do
         request = Browsah::Request.new(:get, 'http://example.com')
         assert_equal :get, request.type
       end
