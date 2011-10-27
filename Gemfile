@@ -13,4 +13,4 @@ group :test do
   gem 'webmock' , :require => 'webmock/test_unit'
 end
 
-gem "step-up", "~> 0.6.0", :group => [:source]
+gem "step-up", "~> 0.7.0", :group => [:source]
