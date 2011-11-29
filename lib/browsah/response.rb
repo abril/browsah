@@ -4,12 +4,14 @@ class Browsah
     attr_reader :status_code
     attr_reader :headers
     attr_reader :body
+    attr_reader :request
     
-    def initialize(browsah, status_code, headers = {}, body = nil)
+    def initialize(browsah, status_code, headers = {}, body = nil, request = nil)
       @browsah     = browsah
       @status_code = status_code
-      @headers     = {}
+      @headers     = Helpers.normalize_headers(headers)
       @body        = body
+      @request     = request
     end
     
     def on(*args)

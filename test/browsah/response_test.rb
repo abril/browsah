@@ -2,12 +2,29 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 describe Browsah::Response do
   before do
-    @brw = Browsah.new 
+    @brw = Browsah.new
   end
   
-  it "implement property to access a original browsah" do
-    res = Browsah::Response.new(@brw, 404)
-    assert_equal @brw, res.browsah
+  describe "implements property" do
+    it "to access a original browsah" do
+      res = Browsah::Response.new(@brw, 404)
+      assert_equal @brw, res.browsah
+    end
+    
+    it "too acesss a response body and headers" do
+      body    = 'Not found'
+      headers = { 'Content-Type' => 'text/html' }
+      res  = Browsah::Response.new(@brw, 404, headers, body)
+      assert_equal body, res.body
+      assert_equal Browsah::Helpers.normalize_headers(headers), res.headers
+    end
+    
+    it "to acesss a request" do
+      req = Browsah::Request.new(:get, 'http://example.com:8080/path')
+      res = Browsah::Response.new(@brw, 404, {}, nil, req)
+      
+      assert_equal req, res.request
+    end
   end
   
   describe "implements facility 'on' to compare status code result" do

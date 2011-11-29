@@ -7,21 +7,15 @@ class Browsah
     
     alias_method :type, :method
     
-    def initialize(method, base_uri, path = '', options = {})      
+    def initialize(method, base_uri, path = '', options = {})
       (options, path) = [path, ''] if path.kind_of?(Hash)
 
-      @method    = method
-      @headers = normalize_headers(options[:headers] || options['headers'] || {})
+      @method  = method
+      @headers = Helpers.normalize_headers(options[:headers] || options['headers'] || {})
       @body    = (options[:body] || options['body'] || nil)
       
       base_uri = base_uri.kind_of?(String) ? Addressable::URI.parse(base_uri) : base_uri
       @uri = base_uri + (path.kind_of?(String) ? Addressable::URI.parse(path) : path)
-    end
-    
-  private
-    
-    def normalize_headers(headers)
-      Hash[headers.map { |k, v| [k.downcase, v] }]
     end
   end
 end

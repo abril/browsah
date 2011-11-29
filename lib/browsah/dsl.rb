@@ -9,12 +9,28 @@ class Browsah
       @pull = []
     end
     
+    def options(urls, *args, &block)
+      request(:options, urls, *args, &block)
+    end
+    
     def get(urls, *args, &block)
       request(:get, urls, *args, &block)
     end
     
+    def head(urls, *args, &block)
+      request(:head, urls, *args, &block)
+    end
+    
     def post(urls, *args, &block)
       request(:post, urls, *args, &block)
+    end
+    
+    def put(urls, *args, &block)
+      request(:put, urls, *args, &block)
+    end
+    
+    def delete(urls, *args, &block)
+      request(:delete, urls, *args, &block)
     end
     
     def request(method, urls, *args, &block)
@@ -44,14 +60,15 @@ class Browsah
           end
           
           requests.each do |request|
-            http = EM::HttpRequest.new(request.uri.to_s).send(request.method, {
+            http = EM::HttpRequest.new(request.uri.to_s).send(('a' + request.method.to_s).to_sym, {
               :body => request.body,
               :head => request.headers
             })
             http.callback {
-              response = Response.new(self, http.response_header.status, {}, http.response)
+              response = Response.new(self, http.response_header.status, {}, http.response, request)
               (is_multi ? responses[index] : responses) << response
             }
+            # TODO: Fixing name to request
             multi.add request.uri.to_s.to_sym, http
           end
           
