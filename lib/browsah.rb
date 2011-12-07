@@ -2,9 +2,9 @@
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__))
 
 # Dependencies
-require "rubygems"
-require "bundler/setup"
-# require other dependencies here...
+require 'rubygems'
+require 'em-synchrony'
+require 'em-synchrony/em-http'
 
 require File.dirname(__FILE__) + '/browsah/version'
 require File.dirname(__FILE__) + '/browsah/helpers'

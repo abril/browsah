@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require 'em-synchrony/em-http'
-
 class Browsah
   module Dsl
     def initialize(uri = '')
