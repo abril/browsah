@@ -3,7 +3,6 @@ lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
 require "browsah"
-require "step-up"
 
 gf = File.expand_path("../GEM_VERSION", __FILE__)
 File.delete(gf) if File.exists?(gf)
@@ -24,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "em-synchrony", "~> 1.0.0"
 
   s.add_development_dependency "webmock"
-  s.add_development_dependency "minitest"
+  s.add_development_dependency "minitest", "~> 2.10.0"
   s.add_development_dependency "ruby-debug19"
   s.add_development_dependency "step-up", "~> 0.7.0"
 end
