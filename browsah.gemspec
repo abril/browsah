@@ -22,9 +22,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency "em-http-request", "~> 1.0.0"
   s.add_dependency "em-synchrony", "~> 1.0.0"
-
-  s.add_development_dependency "webmock"
-  s.add_development_dependency "minitest"
-  s.add_development_dependency "ruby-debug19"
-  s.add_development_dependency "step-up", "~> 0.7.0"
 end
