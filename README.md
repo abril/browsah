@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/abril/browsah.png)](http://travis-ci.org/abril/browsah)
+
 # It's a REAL BROWSAH!!!1!
 
 Unlike other HTTP client libraries, `browsah` aims to be a true browser.
