@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../lib/browsah.rb')
 
 require 'minitest/autorun'
 require 'webmock/test_unit'
-require 'minitest/pride'
 
 begin
   require 'ruby-debug'

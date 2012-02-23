@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.summary       = 'HTTP client and Hypermedia browser'
   s.require_paths = ['lib']
-  s.files         = Dir['{lib/**/*.rb, README.md}']
+  s.files         = Dir['{lib/**/*.rb, README.md, LICENSE}']
 
   s.authors       = 'Abril'
   s.email         = 'lfcipriani@gmail.com'

@@ -1,11 +1,14 @@
 # It's a REAL BROWSAH!!!1!
+[![Build Status](https://secure.travis-ci.org/abril/browsah.png)](http://travis-ci.org/abril/browsah)
 
 Unlike other HTTP client libraries, `browsah` aims to be a true browser.
 
-[![Build Status](https://secure.travis-ci.org/abril/browsah.png)](http://travis-ci.org/abril/browsah)
+`browsah` depends on [em-http-request](http://rubygems.org/gems/em-http-request) and [em-synchrony](http://rubygems.org/gems/em-synchrony), thus is Ruby 1.9.x only.
 
-# Sample Code
-## Simple POST/GET:
+## Examples
+For more examples, see [examples](https://github.com/abril/browsah/tree/master/examples).
+
+### Simple POST/GET:
 
 ```ruby
 require 'browsah'
@@ -30,8 +33,7 @@ bw.get '/urlshortener/v1/url?shortUrl=http://goo.gl/TT1LT' do |r|
 end
 ```
 
-# License
+## License
+[MIT License](http://opensource.org/licenses/MIT). Copyright (c) 2011 Abril Midia.
 
-browsah is licensed under the [BSD License](http://opensource.org/licenses/BSD-2-Clause).
-
-See LICENSE file for details.
+See LICENSE for details.
