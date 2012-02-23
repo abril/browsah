@@ -23,7 +23,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'webmock', '~> 1.8.0'
   s.add_development_dependency 'minitest', '~> 2.11.2'
   s.add_development_dependency 'step-up', '~> 0.8.0'
-  
-  s.add_development_dependency 'ruby-debug' if RUBY_VERSION.start_with?("1.8")
-  s.add_development_dependency 'ruby-debug19' if RUBY_VERSION.start_with?("1.9")
 end
