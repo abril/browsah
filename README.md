@@ -3,7 +3,7 @@
 
 Unlike other HTTP client libraries, `browsah` aims to be a true browser.
 
-`browsah` depends on [em-http-request](http://rubygems.org/gems/em-http-request) and [em-synchrony](http://rubygems.org/gems/em-synchrony), thus is Ruby 1.9.x only.
+*fair warning*: Since `browsah` depends on [em-http-request](http://rubygems.org/gems/em-http-request) and [em-synchrony](http://rubygems.org/gems/em-synchrony), thus is Ruby 1.9.x only.
 
 ## Examples
 For more examples, see [examples](https://github.com/abril/browsah/tree/master/examples).
