@@ -1,4 +1,6 @@
+$LOAD_PATH << "../lib" << "lib"
 require 'browsah'
+
 require 'json'
 
 headers = { 'Content-Type' => 'application/json' }
