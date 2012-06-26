@@ -63,7 +63,7 @@ class Browsah
               :head => request.headers
             })
             http.callback {
-              response = Response.new(self, http.response_header.status, {}, http.response, request)
+              response = Response.new(self, http.response_header.status, http.response_header, http.response, request)
               (is_multi ? responses[index] : responses) << response
             }
             # TODO: Fixing name to request
